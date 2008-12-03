@@ -1,4 +1,8 @@
 #! /usr/bin/python
+#       D
+# /^^^\/
+# \__.|
+#    \\
 import sys
 
 import mode
@@ -6,7 +10,8 @@ import mode
 def execute():
   command = sys.argv[0]
 
-  if command == 'am.py': #the command is the second argument
+  #the command is the second argument
+  if command == 'am.py' or command == 'am':
     command = sys.argv[1]
     args = sys.argv[2:]
   else:

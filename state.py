@@ -1,5 +1,4 @@
 #! /usr/bin/python
-from __future__ import with_statement
 import os, os.path
 
 from util import *
@@ -19,17 +18,35 @@ class State:
   def __init__(self):
     self.config_path = os.path.expanduser('~/.absent-mind/')
     self.ensure_file_exists('cur_mode')
+    if os.path.exists(self.real_path('shell_cmds')):
+      print """
+It looks like your shell isn't configured for absent-mind.  Your
+prompt may not be correctly updated for modes.
+
+Run the following command:
+  am () { am $@; source %s; rm %s; }
+
+      """ % (
+             self.real_path('shell_cmds'),
+             self.real_path('shell_cmds'))
+
+    #TODO: maybe it should be closed
+    self.shell_cmds = self.cfg_file('shell_cmds', 'w') #we clear and rewrite it each time
 
   def exists(self, path):
     return os.path.exists(self.real_path(path))
 
   def ensure_file_exists(self, path):
-    proper_path = self.real_path(path)
-    if not os.path.exists(proper_path):
-      f = self.cfg_file(path, 'w') #doesn't create new files?
-      f.write('')
-      f.close()
-      
+    if not os.path.exists(self.real_path(path)):
+      self.ensure_file_empty(path)
+
+  def ensure_file_empty(self, path):
+    f = self.cfg_file(path, 'w')
+    f.write('')
+    f.close()
+
+  def set_env_var(self, var, value):
+    self.shell_cmds.write('export '+var+'=\''+value+'\'\n')
 
   def real_path(self, path):
     return os.path.normpath(os.path.realpath(self.config_path + path))

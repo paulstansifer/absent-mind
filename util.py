@@ -14,7 +14,7 @@ class CannotComply(Exception):
 
 def y_or_n(prompt):
   while True:
-    inp = raw_input(prompt + ' (y/n)')
+    inp = raw_input(prompt + ' (y/n) ')
     if inp == 'y' or inp == 'Y':
       return True
     if inp == 'n' or inp == 'N':
