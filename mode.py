@@ -5,7 +5,11 @@ from state import cfg
 import util
 
 def mode():
-  return cfg.get_file_var('cur_mode').split(' ')
+  ret_val = cfg.get_file_var('cur_mode').split(' ')
+  if ret_val == ['']:
+    return []
+  else:
+    return ret_val
 
 
 def run_dir(path):
@@ -77,8 +81,11 @@ def push(name):
   _update_ps1()
 
 def pop():
-  run_dir('modes/'+mode()[-1]+'/pop')
-  cfg.set_file_var('cur_mode', ' '.join(mode()[0:-1]))
+  old_mode = mode()
+  if len(old_mode) == 0:
+    raise util.CannotComply('No modes are active.')
+  run_dir('modes/'+old_mode[-1]+'/pop')
+  cfg.set_file_var('cur_mode', ' '.join(old_mode[0:-1]))
 
   _update_ps1()
 
