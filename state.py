@@ -3,8 +3,6 @@ import os, os.path
 
 from util import *
 
-
-
 class BadState(LogicError):
   pass
 #  def __init__(self, value):
